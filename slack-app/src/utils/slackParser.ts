@@ -392,41 +392,43 @@ export class SlackParser {
     return text;
   }
 
-  static parseMessageTextToElements(message: SlackMessage, users: SlackUser[]): (string | { type: 'link'; url: string; text: string })[] {
+  static parseMessageTextToElements(message: SlackMessage, users: SlackUser[]): (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention'; url?: string; text: string; userId?: string })[] {
     let text = message.text;
-
-    // Replace user mentions
-    text = text.replace(/<@([UW][A-Z0-9]+)>/g, (match, userId) => {
-      const user = this.getUserById(users, userId);
-      return user ? `${user.real_name || user.name}` : match;
-    });
-
-    // Replace channel mentions
-    text = text.replace(/<#([C][A-Z0-9]+)\|([^>]+)>/g, (match, channelId, channelName) => {
-      return `#${channelName}`;
-    });
-
-    // Replace special mentions
-    text = text.replace(/<!everyone>/g, '@everyone');
-    text = text.replace(/<!channel>/g, '@channel');
-    text = text.replace(/<!here>/g, '@here');
-
-    // Parse URLs into structured elements
-    const elements: (string | { type: 'link'; url: string; text: string })[] = [];
-    const urlRegex = /<(https?:\/\/[^|>]+)(\|([^>]+))?>/g;
+    const elements: (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention'; url?: string; text: string; userId?: string })[] = [];
+    
+    // Combined regex for all special elements
+    const combinedRegex = /<(https?:\/\/[^|>]+)(\|([^>]+))?|<@([UW][A-Z0-9]+)>|<#([C][A-Z0-9]+)\|([^>]+)>|<!everyone>|<!channel>|<!here>/g;
     let lastIndex = 0;
     let match;
 
-    while ((match = urlRegex.exec(text)) !== null) {
-      // Add text before the URL
+    while ((match = combinedRegex.exec(text)) !== null) {
+      // Add text before the match
       if (match.index > lastIndex) {
         elements.push(text.substring(lastIndex, match.index));
       }
 
-      // Add the URL element
-      const url = match[1];
-      const linkText = match[3] || url;
-      elements.push({ type: 'link', url, text: linkText });
+      if (match[1]) {
+        // URL match
+        const url = match[1];
+        const linkText = match[3] || url;
+        elements.push({ type: 'link', url, text: linkText });
+      } else if (match[4]) {
+        // User mention match
+        const userId = match[4];
+        const user = this.getUserById(users, userId);
+        const displayName = user ? `@${user.real_name || user.name}` : match[0];
+        elements.push({ type: 'user_mention', text: displayName, userId });
+      } else if (match[5] && match[6]) {
+        // Channel mention match
+        const channelName = match[6];
+        elements.push({ type: 'channel_mention', text: `#${channelName}` });
+      } else if (match[0] === '<!everyone>') {
+        elements.push({ type: 'special_mention', text: '@everyone' });
+      } else if (match[0] === '<!channel>') {
+        elements.push({ type: 'special_mention', text: '@channel' });
+      } else if (match[0] === '<!here>') {
+        elements.push({ type: 'special_mention', text: '@here' });
+      }
 
       lastIndex = match.index + match[0].length;
     }
@@ -436,7 +438,7 @@ export class SlackParser {
       elements.push(text.substring(lastIndex));
     }
 
-    // If no URLs were found, return the text as a single element
+    // If no special elements were found, return the text as a single element
     if (elements.length === 0) {
       elements.push(text);
     }

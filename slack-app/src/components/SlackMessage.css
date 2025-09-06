@@ -62,12 +62,24 @@
   color: #1d1c1d;
   font-size: 15px;
   line-height: 1.46668;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.message-author:hover {
+  color: #1264a3;
 }
 
 .message-time {
   font-size: 12px;
-  color: #616061;
+  color: #868e96;
   font-weight: 400;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.message-time:hover {
+  color: #495057;
 }
 
 .message-edited {
@@ -84,13 +96,59 @@
   white-space: pre-wrap;
 }
 
-.message-link {
-  color: #1264a3;
+/* User mentions styling */
+.user-mention {
+  background-color: #e3f2fd;
+  color: #1565c0;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 600;
   text-decoration: none;
 }
 
+.user-mention:hover {
+  background-color: #bbdefb;
+  color: #0d47a1;
+}
+
+/* Channel mentions styling */
+.channel-mention {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.channel-mention:hover {
+  background-color: #e1bee7;
+  color: #4a148c;
+}
+
+/* Special mentions styling */
+.special-mention {
+  background-color: #fff3e0;
+  color: #ef6c00;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.message-link {
+  color: #1264a3;
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
 .message-link:hover {
-  text-decoration: underline;
+  text-decoration: none;
+  border-bottom-color: #1264a3;
+  background-color: rgba(18, 100, 163, 0.05);
+  padding: 1px 2px;
+  border-radius: 2px;
 }
 
 .message-reactions {
@@ -117,9 +175,12 @@
 }
 
 .system-message {
-  padding: 4px 20px;
+  padding: 8px 20px;
   font-style: italic;
   color: #616061;
+  background-color: #f8f9fa;
+  border-left: 3px solid #dee2e6;
+  margin: 2px 0;
 }
 
 .system-message-content {
@@ -127,6 +188,27 @@
   align-items: center;
   gap: 8px;
   font-size: 13px;
+}
+
+/* Specific system message types */
+.system-message.channel-join {
+  background-color: #e8f5e9;
+  border-left-color: #4caf50;
+  color: #2e7d32;
+}
+
+.system-message.channel-leave {
+  background-color: #fff3e0;
+  border-left-color: #ff9800;
+  color: #ef6c00;
+}
+
+.system-message.channel-topic,
+.system-message.channel-purpose,
+.system-message.channel-name {
+  background-color: #e3f2fd;
+  border-left-color: #2196f3;
+  color: #1565c0;
 }
 
 .system-message-text {

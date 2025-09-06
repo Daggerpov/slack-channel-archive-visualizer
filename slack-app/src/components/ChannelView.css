@@ -28,14 +28,14 @@
 
 .channel-topic {
   font-size: 14px;
-  color: #616061;
+  color: #495057;
   margin: 0 0 4px 0;
   line-height: 1.4;
 }
 
 .channel-meta {
   font-size: 13px;
-  color: #616061;
+  color: #495057;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -46,7 +46,7 @@
 }
 
 .channel-purpose {
-  color: #616061;
+  color: #495057;
 }
 
 .messages-container {
@@ -60,7 +60,7 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: #616061;
+  color: #495057;
   font-size: 15px;
 }
 

@@ -20,8 +20,9 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
 
   // Handle system messages
   if (message.subtype) {
+    const systemMessageClass = `slack-message system-message ${message.subtype ? message.subtype.replace('_', '-') : ''}`;
     return (
-      <div className="slack-message system-message">
+      <div className={systemMessageClass}>
         <div className="system-message-content">
           <span className="system-message-text">{message.text}</span>
           <span className="message-time">{time}</span>
@@ -81,6 +82,34 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                   >
                     {element.text}
                   </a>
+                );
+              } else if (element.type === 'user_mention') {
+                return (
+                  <span 
+                    key={elementIndex} 
+                    className="user-mention"
+                    title={`User ID: ${element.userId}`}
+                  >
+                    {element.text}
+                  </span>
+                );
+              } else if (element.type === 'channel_mention') {
+                return (
+                  <span 
+                    key={elementIndex} 
+                    className="channel-mention"
+                  >
+                    {element.text}
+                  </span>
+                );
+              } else if (element.type === 'special_mention') {
+                return (
+                  <span 
+                    key={elementIndex} 
+                    className="special-mention"
+                  >
+                    {element.text}
+                  </span>
                 );
               }
               return null;
@@ -158,6 +187,34 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                                 >
                                   {element.text}
                                 </a>
+                              );
+                            } else if (element.type === 'user_mention') {
+                              return (
+                                <span 
+                                  key={elementIndex} 
+                                  className="user-mention"
+                                  title={`User ID: ${element.userId}`}
+                                >
+                                  {element.text}
+                                </span>
+                              );
+                            } else if (element.type === 'channel_mention') {
+                              return (
+                                <span 
+                                  key={elementIndex} 
+                                  className="channel-mention"
+                                >
+                                  {element.text}
+                                </span>
+                              );
+                            } else if (element.type === 'special_mention') {
+                              return (
+                                <span 
+                                  key={elementIndex} 
+                                  className="special-mention"
+                                >
+                                  {element.text}
+                                </span>
                               );
                             }
                             return null;
