@@ -11,6 +11,7 @@ import './App.css';
 function App() {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [slackData, setSlackData] = useState<SlackExport | null>(null);
+  const [guestData, setGuestData] = useState<SlackExport | null>(null);
   const [selectedChannel, setSelectedChannel] = useState<string | null>(null);
   const [channelData, setChannelData] = useState<ChannelData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,14 +72,23 @@ function App() {
       setError(null);
       
       const data = await SlackParser.parseSlackExport(files);
-      setSlackData(data);
       
-      // Save to persistent storage
-      try {
-        StorageManager.saveSlackData(data);
-      } catch (storageError) {
-        console.warn('Could not save data to storage:', storageError);
-        // Continue anyway - the data is still loaded in memory
+      if (userRole === 'guest') {
+        // For guests, store data temporarily in memory only
+        setGuestData(data);
+      } else {
+        // For authenticated users, store in persistent storage
+        setSlackData(data);
+        
+        // Save to persistent storage for admin users
+        if (userRole === 'admin') {
+          try {
+            StorageManager.saveSlackData(data);
+          } catch (storageError) {
+            console.warn('Could not save data to storage:', storageError);
+            // Continue anyway - the data is still loaded in memory
+          }
+        }
       }
       
       // Auto-select the first available channel
@@ -106,6 +116,7 @@ function App() {
   const handleLogout = () => {
     setUserRole(null);
     setSlackData(null);
+    setGuestData(null);
     setSelectedChannel(null);
     setChannelData(null);
     StorageManager.clearAuth();
@@ -113,26 +124,28 @@ function App() {
 
   // Update channel data when selection changes
   useEffect(() => {
-    if (slackData && selectedChannel) {
+    const currentData = userRole === 'guest' ? guestData : slackData;
+    if (currentData && selectedChannel) {
       const data = SlackParser.processChannelData(
         selectedChannel,
-        slackData.channels,
-        slackData.users,
-        slackData.messages
+        currentData.channels,
+        currentData.users,
+        currentData.messages
       );
       setChannelData(data);
     } else {
       setChannelData(null);
     }
-  }, [slackData, selectedChannel]);
+  }, [slackData, guestData, selectedChannel, userRole]);
 
   // Show authentication gateway if user is not authenticated
   if (!userRole) {
     return <AuthGateway onAuthenticated={handleAuthenticated} />;
   }
 
-  // Show upload interface if no data is available and user has admin privileges
-  if (!slackData) {
+  // Show upload interface if no data is available
+  const currentData = userRole === 'guest' ? guestData : slackData;
+  if (!currentData) {
     return (
       <div className="App">
         <div className="app-header">
@@ -154,7 +167,18 @@ function App() {
           </div>
         )}
         
-        {userRole === 'admin' ? (
+        {userRole === 'guest' ? (
+          <div className="guest-upload-section">
+            <div className="guest-info">
+              <h2>Upload Your Slack Export</h2>
+              <p>As a guest, you can upload and visualize your own Slack channel export locally. Your data will not be saved permanently and is only visible to you during this session.</p>
+            </div>
+            <FileUpload 
+              onFilesSelected={handleFilesSelected}
+              isLoading={isLoading}
+            />
+          </div>
+        ) : userRole === 'admin' ? (
           <FileUpload 
             onFilesSelected={handleFilesSelected}
             isLoading={isLoading}
@@ -169,13 +193,16 @@ function App() {
     );
   }
 
-  const availableChannels = Object.keys(slackData.messages);
+  const availableChannels = Object.keys(currentData.messages);
 
   return (
     <div className="App">
       <div className="app-header">
         <div className="header-content">
           <h1>Slack Channel Archive Visualizer</h1>
+          {userRole === 'guest' && (
+            <p>Viewing your temporary upload - data will not be saved</p>
+          )}
         </div>
         <div className="header-actions">
           <span className="user-role">Logged in as: {userRole}</span>
@@ -187,7 +214,7 @@ function App() {
       
       <div className="app-layout">
         <ChannelList
-          channels={slackData.channels}
+          channels={currentData.channels}
           selectedChannel={selectedChannel}
           onChannelSelect={handleChannelSelect}
           availableChannels={availableChannels}
@@ -217,6 +244,18 @@ function App() {
             className="upload-new-button"
           >
             Upload New Export
+          </button>
+        )}
+        {userRole === 'guest' && (
+          <button 
+            onClick={() => {
+              setGuestData(null);
+              setSelectedChannel(null);
+              setChannelData(null);
+            }}
+            className="upload-new-button"
+          >
+            Upload Different Export
           </button>
         )}
       </div>

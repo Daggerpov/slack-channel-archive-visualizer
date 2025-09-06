@@ -17,8 +17,8 @@ The application uses a three-tier authentication system:
 ### Access Levels
 
 1. **Guest Access**: 
-   - View the latest uploaded archive
-   - No upload capabilities
+   - Upload and visualize your own Slack export locally
+   - Data is temporary and not saved permanently
    - No passkey required
 
 2. **Club Members** (Passkey: `mmhcgrit`):
@@ -67,7 +67,8 @@ The application will open at [http://localhost:3000](http://localhost:3000).
 ### For Guests
 1. Visit the application
 2. Click "Continue as Guest"
-3. View the latest uploaded archive (if available)
+3. Upload your own Slack export folder to visualize locally
+4. Data is temporary and will be lost when you close the browser or logout
 
 ### For Club Members
 1. Visit the application

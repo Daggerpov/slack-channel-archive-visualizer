@@ -95,8 +95,8 @@ const AuthGateway: React.FC<AuthGatewayProps> = ({ onAuthenticated }) => {
           </button>
 
           <div className="auth-info">
-            <p><strong>Club Members:</strong> Use your club passkey to access full archives</p>
-            <p><strong>Guests:</strong> View the latest uploaded archive without upload capabilities</p>
+            <p><strong>Club Members:</strong> Use your club passkey to access persistent archives</p>
+            <p><strong>Guests:</strong> Upload and visualize your own Slack export locally (temporary session only)</p>
           </div>
         </div>
       </div>
