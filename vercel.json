@@ -2,11 +2,6 @@
   "buildCommand": "cd slack-app && npm run build",
   "outputDirectory": "slack-app/build",
   "installCommand": "cd slack-app && npm install",
-  "functions": {
-    "api/*.js": {
-      "runtime": "nodejs22.x"
-    }
-  },
   "rewrites": [
     {
       "source": "/api/(.*)",
