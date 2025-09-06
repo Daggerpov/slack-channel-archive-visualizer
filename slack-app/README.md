@@ -21,23 +21,25 @@ The application uses a three-tier authentication system:
    - Data is temporary and not saved permanently
    - No passkey required
 
-2. **Club Members** (Passkey: `mmhcgrit`):
+2. **Club Members**:
    - Full access to view archives
    - Cannot upload new archives
+   - Requires club member passkey (see environment setup)
 
-3. **Administrators** (Passkey: `mmhcgrit2025!`):
+3. **Administrators**:
    - Full access to view archives
    - Can upload new Slack exports
    - Can replace existing archives
+   - Requires admin passkey (see environment setup)
 
 ### Environment Configuration
 
-The application uses environment variables for passkey configuration. Create a `.env` file in the project root:
+🔒 **Security Update**: This application now uses secure server-side authentication via Vercel Serverless Functions.
 
-```env
-REACT_APP_CLUB_PASSKEY=mmhcgrit
-REACT_APP_ADMIN_PASSKEY=mmhcgrit2025!
-```
+See the `ENVIRONMENT_SETUP.md` file in the project root for detailed setup instructions including:
+- Secure environment variable configuration
+- Vercel deployment setup
+- Local development setup
 
 ## Getting Started
 
@@ -54,7 +56,7 @@ REACT_APP_ADMIN_PASSKEY=mmhcgrit2025!
    ```bash
    npm install
    ```
-4. Create a `.env` file with the required passkeys (see above)
+4. Set up environment variables (see `ENVIRONMENT_SETUP.md` in project root)
 5. Start the development server:
    ```bash
    npm start
@@ -72,14 +74,16 @@ The application will open at [http://localhost:3000](http://localhost:3000).
 
 ### For Club Members
 1. Visit the application
-2. Enter the club passkey: `mmhcgrit`
+2. Enter your club member passkey
 3. Access full archive viewing capabilities
 
 ### For Administrators
 1. Visit the application
-2. Enter the admin passkey: `mmhcgrit2025!`
+2. Enter your admin passkey
 3. Upload new Slack exports or view existing archives
 4. Use "Upload New Export" to replace the current archive
+
+**Note**: Contact your system administrator for the current passkeys.
 
 ### Uploading Slack Exports
 
@@ -110,8 +114,10 @@ Builds the app for production to the `build` folder
 
 ## Security Notes
 
-- Passkeys are stored in environment variables and not committed to version control
+- 🔒 **Enhanced Security**: Uses Vercel Serverless Functions for secure authentication
+- Passkey hashes are stored server-side and never exposed to the browser
 - Authentication sessions are temporary and stored locally
+- Environment variables are properly secured and not committed to version control
 - The `.env` file is excluded from git via `.gitignore`
 
 ## Learn More

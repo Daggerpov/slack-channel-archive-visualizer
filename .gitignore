@@ -98,5 +98,15 @@ Thumbs.db
 # Local storage for uploaded data
 local-storage/
 uploaded-data/
+
+# Vercel
 .vercel
+
+# Sample data (removed for security)
+# slack-app/public/sample-data/ - directory removed entirely
+
+# Package lock files
 slack-app/package-lock.json
+
+# Private documentation
+*PRIVATE*

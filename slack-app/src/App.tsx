@@ -49,15 +49,7 @@ function App() {
         return;
       }
       
-      // If no stored data, try to load sample data
-      const data = await SlackParser.loadSampleData();
-      setSlackData(data);
-      
-      // Auto-select the first available channel
-      const availableChannels = Object.keys(data.messages);
-      if (availableChannels.length > 0) {
-        setSelectedChannel(availableChannels[0]);
-      }
+      // No stored data available - user needs to upload their own data
     } catch (error) {
       console.warn('Could not load data:', error);
       // This is expected if no data exists yet

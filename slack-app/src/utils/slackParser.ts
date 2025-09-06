@@ -248,33 +248,6 @@ export class SlackParser {
   static getEmojiFromName(name: string): string {
     return EMOJI_MAP[name] || `:${name}:`;
   }
-  static async loadSampleData(): Promise<SlackExport> {
-    try {
-      const [channelsResponse, usersResponse, messagesResponse] = await Promise.all([
-        fetch('/sample-data/channels.json'),
-        fetch('/sample-data/users.json'),
-        fetch('/sample-data/2025-06-07.json')
-      ]);
-
-      const channels: SlackChannel[] = await channelsResponse.json();
-      const users: SlackUser[] = await usersResponse.json();
-      const messages: SlackMessage[] = await messagesResponse.json();
-
-      // Create a simple message structure for demo
-      const messagesByChannel: Record<string, SlackMessage[]> = {
-        'announcements': messages
-      };
-
-      return {
-        channels,
-        users,
-        messages: messagesByChannel
-      };
-    } catch (error) {
-      console.error('Error loading sample data:', error);
-      throw error;
-    }
-  }
 
   static async parseSlackExport(files: FileList): Promise<SlackExport> {
     const channels: SlackChannel[] = [];
