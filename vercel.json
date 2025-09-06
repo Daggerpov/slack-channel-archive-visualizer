@@ -4,7 +4,7 @@
   "installCommand": "cd slack-app && npm install",
   "functions": {
     "api/*.js": {
-      "runtime": "nodejs18.x"
+      "runtime": "nodejs22.x"
     }
   },
   "rewrites": [
