@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "slack-channel-archive-visualizer",
+  "builds": [
+    {
+      "src": "slack-app/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "build"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/slack-app/$1"
+    }
+  ],
+  "buildCommand": "cd slack-app && npm run build",
+  "outputDirectory": "slack-app/build",
+  "installCommand": "cd slack-app && npm install"
+}
