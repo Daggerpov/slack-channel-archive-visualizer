@@ -42,9 +42,12 @@ const ClubApp: React.FC = () => {
       const storedData = StorageManager.getSlackData();
       if (storedData) {
         setSlackData(storedData);
-        // Auto-select the first available channel
+        // Auto-select #general-club-ideas for MMHC executives, or first available channel as fallback
         const availableChannels = Object.keys(storedData.messages);
-        if (availableChannels.length > 0) {
+        const preferredChannel = 'general-club-ideas';
+        if (availableChannels.includes(preferredChannel)) {
+          setSelectedChannel(preferredChannel);
+        } else if (availableChannels.length > 0) {
           setSelectedChannel(availableChannels[0]);
         }
         return;
@@ -84,9 +87,12 @@ const ClubApp: React.FC = () => {
         }
       }
       
-      // Auto-select the first available channel
+      // Auto-select #general-club-ideas for MMHC executives, or first available channel as fallback
       const availableChannels = Object.keys(data.messages);
-      if (availableChannels.length > 0) {
+      const preferredChannel = 'general-club-ideas';
+      if (availableChannels.includes(preferredChannel)) {
+        setSelectedChannel(preferredChannel);
+      } else if (availableChannels.length > 0) {
         setSelectedChannel(availableChannels[0]);
       }
     } catch (error) {
@@ -103,10 +109,13 @@ const ClubApp: React.FC = () => {
 
   const handleAutoExportDataUpdate = (newData: SlackExport) => {
     setSlackData(newData);
-    // Auto-select the first available channel if none is selected
+    // Auto-select #general-club-ideas for MMHC executives if none is selected, or first available channel as fallback
     if (!selectedChannel) {
       const availableChannels = Object.keys(newData.messages);
-      if (availableChannels.length > 0) {
+      const preferredChannel = 'general-club-ideas';
+      if (availableChannels.includes(preferredChannel)) {
+        setSelectedChannel(preferredChannel);
+      } else if (availableChannels.length > 0) {
         setSelectedChannel(availableChannels[0]);
       }
     }
@@ -163,7 +172,7 @@ const ClubApp: React.FC = () => {
         <div className="app-header">
           <div className="header-content">
             <a href="/" className="home-link">← Back to Home</a>
-            <h1>Slack Channel Archive Visualizer</h1>
+            <h1>Slack Channel Archive Visualizer - MMHC</h1>
             <p>View and explore your Slack channel exports in a familiar interface</p>
           </div>
           <div className="header-actions">
@@ -213,7 +222,7 @@ const ClubApp: React.FC = () => {
       <div className="app-header">
         <div className="header-content">
           <a href="/" className="home-link">← Back to Home</a>
-          <h1>Slack Channel Archive Visualizer</h1>
+          <h1>Slack Channel Archive Visualizer - MMHC</h1>
           {userRole === 'guest' && (
             <p>Viewing your temporary upload - data will not be saved</p>
           )}

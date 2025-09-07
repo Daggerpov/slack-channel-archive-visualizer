@@ -51,7 +51,7 @@ const AuthGateway: React.FC<AuthGatewayProps> = ({ onAuthenticated }) => {
     <div className="auth-gateway">
       <div className="auth-container">
         <div className="auth-header">
-          <h1>Slack Channel Archive Visualizer</h1>
+          <h1>Slack Channel Archive Visualizer - MMHC</h1>
           <p>Access your club's Slack channel archives</p>
         </div>
 

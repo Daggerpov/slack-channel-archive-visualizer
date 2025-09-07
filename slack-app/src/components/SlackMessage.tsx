@@ -174,11 +174,12 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                             const parent = target.parentElement;
                             if (parent) {
                               parent.innerHTML = `
-                                <div class="file-info">
+                                <div class="file-info media-error">
                                   <div class="file-icon">📷</div>
                                   <div class="file-details">
                                     <div class="file-name">${file.title || file.name}</div>
                                     <div class="file-meta">${file.pretty_type || file.filetype} • ${(file.size / 1024).toFixed(1)} KB</div>
+                                    <div class="media-error-message">Sorry, this media didn't come through properly upon exporting—likely since it's older than 90 days</div>
                                   </div>
                                 </div>
                               `;
@@ -199,7 +200,7 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                             {file.size && ` • ${(file.size / 1024).toFixed(1)} KB`}
                           </div>
                         </div>
-                        {file.url_private && (
+                        {file.url_private ? (
                           <a 
                             href={file.url_private} 
                             target="_blank" 
@@ -213,6 +214,10 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                           >
                             Download
                           </a>
+                        ) : (
+                          <div className="media-error-message">
+                            Sorry, this media didn't come through properly upon exporting—likely since it's older than 90 days
+                          </div>
                         )}
                       </div>
                     )}

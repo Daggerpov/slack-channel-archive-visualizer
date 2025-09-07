@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ChannelData } from '../types/slack';
 import { SlackParser } from '../utils/slackParser';
 import SlackMessage from './SlackMessage';
@@ -11,6 +11,28 @@ interface ChannelViewProps {
 
 const ChannelView: React.FC<ChannelViewProps> = ({ channelData }) => {
   const { channel, messages, users } = channelData;
+  const firstRealMessageRef = useRef<HTMLDivElement>(null);
+
+  // Find the first non-system message for scrolling
+  const findFirstRealMessage = (messages: any[]) => {
+    return messages.findIndex(message => 
+      !message.subtype || 
+      !['channel_join', 'channel_leave', 'channel_name', 'channel_topic', 'channel_purpose'].includes(message.subtype)
+    );
+  };
+
+  // Scroll to first real message when channel data changes
+  useEffect(() => {
+    if (messages.length > 0 && firstRealMessageRef.current) {
+      // Small delay to ensure DOM is rendered
+      setTimeout(() => {
+        firstRealMessageRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [channel.id, messages]);
 
   return (
     <div className="channel-view">
@@ -51,13 +73,21 @@ const ChannelView: React.FC<ChannelViewProps> = ({ channelData }) => {
               messages[index - 1].user !== message.user ||
               message.subtype !== undefined;
             
+            // Check if this is the first real (non-system) message
+            const firstRealMessageIndex = findFirstRealMessage(messages);
+            const isFirstRealMessage = index === firstRealMessageIndex;
+            
             acc.push(
-              <SlackMessage
+              <div 
                 key={`${message.ts}-${index}`}
-                message={message}
-                users={users}
-                showAvatar={showAvatar}
-              />
+                ref={isFirstRealMessage ? firstRealMessageRef : null}
+              >
+                <SlackMessage
+                  message={message}
+                  users={users}
+                  showAvatar={showAvatar}
+                />
+              </div>
             );
 
             return acc;
