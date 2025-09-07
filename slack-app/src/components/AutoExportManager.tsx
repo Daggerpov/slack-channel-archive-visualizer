@@ -76,22 +76,18 @@ const AutoExportManager: React.FC<AutoExportManagerProps> = ({ onDataUpdated, us
 
   const checkExportStatus = async () => {
     try {
-      // This would typically check a status endpoint or database
-      // For now, we'll show a simple status based on the current date
+      // Calculate next run time (daily at 2 AM)
       const now = new Date();
-      const cutoffDate = new Date('2025-09-15T00:00:00Z');
-      const scheduleType = now < cutoffDate ? 'hourly' : 'daily';
+      let nextRun = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 2, 0, 0);
       
-      let nextRun: Date;
-      if (scheduleType === 'hourly') {
-        nextRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours() + 1, 0, 0);
-      } else {
-        nextRun = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 2, 0, 0);
+      // If it's before 2 AM today, next run is today at 2 AM
+      if (now.getHours() < 2) {
+        nextRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 2, 0, 0);
       }
 
       setExportStatus(prev => ({
         ...prev,
-        scheduleType,
+        scheduleType: 'daily',
         nextRun: nextRun.toISOString()
       }));
     } catch (error) {
@@ -111,15 +107,7 @@ const AutoExportManager: React.FC<AutoExportManagerProps> = ({ onDataUpdated, us
   };
 
   const getScheduleDescription = () => {
-    const now = new Date();
-    const cutoffDate = new Date('2025-09-15T00:00:00Z');
-    
-    if (now < cutoffDate) {
-      const daysUntilChange = Math.ceil((cutoffDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-      return `Currently running hourly exports. Will switch to daily exports in ${daysUntilChange} days (Sep 15, 2025).`;
-    } else {
-      return 'Currently running daily exports at 2:00 AM.';
-    }
+    return 'Automated exports run daily at 2:00 AM, fetching the last 25 hours of messages to ensure complete coverage.';
   };
 
   if (userRole === 'guest') {

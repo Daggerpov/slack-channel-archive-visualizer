@@ -110,3 +110,6 @@ slack-app/package-lock.json
 
 # Private documentation
 *PRIVATE*
+
+# Security utilities (should be deleted after use)
+generate-secure-hashes.js

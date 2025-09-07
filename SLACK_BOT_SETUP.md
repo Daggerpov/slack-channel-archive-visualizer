@@ -35,8 +35,8 @@ This guide will help you set up a Slack Bot to enable automated data exports fro
 Add the following to your environment variables (Vercel dashboard or `.env` file):
 
 ```
-SLACK_BOT_TOKEN=xoxb-your-bot-token-here
-CRON_SECRET=your-secure-random-string-here
+SLACK_BOT_TOKEN=xoxb-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
+CRON_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 Generate a secure cron secret:
@@ -53,12 +53,14 @@ Add to your `vercel.json`:
 {
   "crons": [
     {
-      "path": "/api/cron-export?secret=your-cron-secret",
-      "schedule": "0 * * * *"
+      "path": "/api/cron-export",
+      "schedule": "0 2 * * *"
     }
   ]
 }
 ```
+
+**Note**: Vercel Hobby accounts are limited to daily cron jobs. The above schedule runs daily at 2:00 AM.
 
 ### Option B: External Cron Service
 
@@ -71,9 +73,7 @@ Set up to call:
 - **URL**: `https://your-domain.vercel.app/api/cron-export`
 - **Method**: GET or POST
 - **Headers**: `x-cron-secret: your-cron-secret`
-- **Schedule**: 
-  - Until Sep 15, 2025: Every hour (`0 * * * *`)
-  - After Sep 15, 2025: Daily at 2 AM (`0 2 * * *`)
+- **Schedule**: Daily at 2 AM (`0 2 * * *`)
 
 ### Option C: Manual Trigger
 
@@ -102,13 +102,10 @@ curl -X POST https://your-domain.vercel.app/api/slack-export \
 
 The automated system follows this schedule:
 
-- **Until September 15, 2025**: Exports run every hour
-  - Fetches messages from the last 2 hours (with overlap for safety)
-  - Ensures no messages are missed during high-activity periods
-
-- **After September 15, 2025**: Exports run once daily at 2 AM
+- **Daily exports at 2:00 AM**
   - Fetches messages from the last 25 hours (with overlap for safety)
-  - Reduces API usage while maintaining complete coverage
+  - Ensures no messages are missed between runs
+  - Compatible with Vercel Hobby account limitations
 
 ## Troubleshooting
 

@@ -7,30 +7,37 @@
 - ✅ Implemented Vercel Serverless Functions for secure authentication
 - ✅ Passkey hashes are no longer exposed in browser bundle
 
-### 2. **Sensitive Data in Documentation**
+### 2. **Cryptographic Security Enhanced** 
+- ✅ **CRITICAL FIX**: Replaced weak hash function with SHA-256 cryptographic hashing
+- ✅ Eliminated collision vulnerabilities and brute force risks
+- ✅ Implemented secure hash generator utility for environment setup
+- ✅ Updated all authentication endpoints to use secure hashing
+
+### 3. **Sensitive Data in Documentation**
 - ✅ Removed exposed passkeys from `README.md`
 - ✅ Updated documentation to reference secure environment setup
 - ✅ Added proper security notes and instructions
 
-### 3. **Sample Data Removed**
+### 4. **Sample Data Removed**
 - ✅ **COMPLETED**: All sample data containing real personal information has been completely removed
 - ✅ Removed `slack-app/public/sample-data/` directory entirely
 - ✅ Removed `loadSampleData()` function from codebase
 - ✅ Updated app logic to work without sample data
 
-### 4. **Git Ignore Configuration**
+### 5. **Git Ignore Configuration**
 - ✅ Environment files (`.env*`) properly ignored
 - ✅ Vercel deployment files (`.vercel`) ignored
 - ✅ Sample data directory ignored
 - ✅ Build artifacts and dependencies ignored
+- ✅ Security utilities (hash generator) properly ignored
 
 ## 🔒 Current Security Architecture
 
 ```
 Frontend (React) → API Endpoint (/api/auth) → Serverless Function → Environment Variables
      ↓                    ↓                        ↓                      ↓
-Browser Bundle      POST Request            Server-side Validation    Secure Storage
-(No secrets)       (Passkey only)          (Hash comparison)         (Vercel Env Vars)
+Browser Bundle      POST Request            Server-side Validation      Secure Storage
+(No secrets)       (Passkey only)          (SHA-256 Hash comparison)   (Vercel Env Vars)
 ```
 
 ## ⚠️ Remaining Considerations
@@ -42,7 +49,13 @@ Browser Bundle      POST Request            Server-side Validation    Secure Sto
 - No risk of data leaks from sample files
 
 ### Environment Variables
-Ensure the required `CLUB_PASSKEY_HASH` and `ADMIN_PASSKEY_HASH` values are set in Vercel. Refer to the private documentation for specific hash values.
+**IMPORTANT**: You must regenerate your passkey hashes using the new SHA-256 system:
+
+1. Run `node generate-secure-hashes.js` to generate new hashes
+2. Update your Vercel environment variables with the new SHA-256 hashes
+3. Delete the generator script immediately after use
+
+The old simple hash values will no longer work with the new secure system.
 
 ## 🛡️ Security Best Practices Implemented
 

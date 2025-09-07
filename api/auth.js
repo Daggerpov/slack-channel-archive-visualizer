@@ -20,18 +20,13 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'Server configuration error' });
     }
 
-    // Simple hash function (same as used in the frontend)
-    const simpleHash = (str) => {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // Convert to 32-bit integer
-      }
-      return hash.toString();
+    // Secure hash function using Node.js built-in crypto
+    const crypto = require('crypto');
+    const secureHash = (str) => {
+      return crypto.createHash('sha256').update(str).digest('hex');
     };
 
-    const inputHash = simpleHash(passkey);
+    const inputHash = secureHash(passkey);
 
     // Check against the secure hashes
     if (inputHash === adminPasskeyHash) {

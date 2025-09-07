@@ -15,7 +15,7 @@
   "crons": [
     {
       "path": "/api/cron-export",
-      "schedule": "0 * * * *"
+      "schedule": "0 2 * * *"
     }
   ]
 }

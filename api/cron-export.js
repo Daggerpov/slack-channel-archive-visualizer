@@ -3,25 +3,18 @@ import { WebClient } from '@slack/web-api';
 // Initialize Slack client
 const slack = new WebClient(process.env.SLACK_BOT_TOKEN);
 
-// Function to determine if we should run hourly or daily based on the date
-function shouldRunHourly() {
+// Function to determine time range based on the date
+function getTimeRangeHours() {
   const now = new Date();
   const cutoffDate = new Date('2025-09-15T00:00:00Z');
-  return now < cutoffDate;
-}
-
-// Function to check if it's time to run based on the schedule
-function shouldRunNow() {
-  const now = new Date();
-  const currentHour = now.getHours();
-  const currentMinute = now.getMinutes();
   
-  if (shouldRunHourly()) {
-    // Run every hour (at minute 0)
-    return currentMinute === 0;
+  if (now < cutoffDate) {
+    // Before Sep 15, 2025: Get last 25 hours to ensure we don't miss messages
+    // (since we can only run daily, we need a longer window)
+    return 25;
   } else {
-    // Run once daily at 2 AM (at minute 0)
-    return currentHour === 2 && currentMinute === 0;
+    // After Sep 15, 2025: Get last 25 hours (standard daily window)
+    return 25;
   }
 }
 
@@ -33,10 +26,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Verify the request is authorized (using a cron secret)
+    // Verify the request is authorized (using a cron secret or Vercel cron header)
     const cronSecret = req.headers['x-cron-secret'] || req.query.secret || req.body?.secret;
+    const isVercelCron = req.headers['user-agent']?.includes('vercel-cron') || 
+                        req.headers['x-vercel-cron'] === '1';
     
-    if (cronSecret !== process.env.CRON_SECRET) {
+    // Allow Vercel's internal cron calls or requests with valid cron secret
+    if (!isVercelCron && cronSecret !== process.env.CRON_SECRET) {
       return res.status(401).json({ error: 'Unauthorized cron request' });
     }
 
@@ -47,8 +43,7 @@ export default async function handler(req, res) {
       });
     }
 
-    const isHourlySchedule = shouldRunHourly();
-    const scheduleType = isHourlySchedule ? 'hourly' : 'daily';
+    const scheduleType = 'daily';
     
     console.log(`Running automated Slack export (${scheduleType} schedule)...`);
 
@@ -79,15 +74,8 @@ export default async function handler(req, res) {
       usersById[user.id] = user;
     });
 
-    // Determine time range for messages based on schedule
-    let timeRangeHours;
-    if (isHourlySchedule) {
-      // For hourly updates, get messages from the last 2 hours (with overlap for safety)
-      timeRangeHours = 2;
-    } else {
-      // For daily updates, get messages from the last 25 hours (with overlap for safety)
-      timeRangeHours = 25;
-    }
+    // Determine time range for messages
+    const timeRangeHours = getTimeRangeHours();
 
     const timeRangeMs = timeRangeHours * 60 * 60 * 1000;
     const oldestTimestamp = Math.floor((Date.now() - timeRangeMs) / 1000);
@@ -184,7 +172,7 @@ export default async function handler(req, res) {
       message: `Successfully completed ${scheduleType} export: ${totalNewMessages} new messages from ${exportData.totalChannels} channels`,
       schedule: {
         type: scheduleType,
-        nextScheduleChange: isHourlySchedule ? '2025-09-15T00:00:00Z' : null,
+        nextRun: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(), // Next day at same time
         timeRangeHours: timeRangeHours
       }
     });

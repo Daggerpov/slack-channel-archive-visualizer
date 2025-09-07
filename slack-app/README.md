@@ -94,9 +94,9 @@ The application will open at [http://localhost:3000](http://localhost:3000).
 1. Set up a Slack Bot following the `SLACK_BOT_SETUP.md` guide
 2. Configure environment variables for automated fetching
 3. The system will automatically:
-   - Fetch data hourly until September 15, 2025
-   - Switch to daily fetches after September 15, 2025
-   - Update the archive with new messages continuously
+   - Fetch data daily at 2:00 AM
+   - Update the archive with new messages from the last 25 hours
+   - Ensure complete message coverage with overlap
 
 #### Manual Uploads
 1. Export your Slack workspace data from Slack's admin settings

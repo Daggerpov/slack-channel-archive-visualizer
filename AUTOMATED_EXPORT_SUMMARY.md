@@ -6,16 +6,16 @@ This implementation adds automated Slack data export functionality to your Slack
 
 ## Key Features
 
-### 🕐 Smart Scheduling
-- **Until September 15, 2025**: Exports run every hour
-- **After September 15, 2025**: Exports run once daily at 2:00 AM
-- Automatic schedule transition based on date
+### 🕐 Daily Scheduling
+- **Daily exports at 2:00 AM**
+- Compatible with Vercel Hobby account limitations
+- Reliable daily updates with complete message coverage
 
 ### 🔄 Incremental Updates
 - Fetches only recent messages to minimize API usage
-- Hourly exports fetch last 2 hours of messages (with overlap)
 - Daily exports fetch last 25 hours of messages (with overlap)
-- Ensures no messages are missed during transitions
+- Ensures no messages are missed between daily runs
+- Efficient API usage while maintaining complete coverage
 
 ### 🛡️ Secure Integration
 - Uses Slack Bot tokens with minimal required permissions
@@ -48,8 +48,8 @@ This implementation adds automated Slack data export functionality to your Slack
 
 ### Environment Variables
 ```
-SLACK_BOT_TOKEN=xoxb-your-bot-token-here
-CRON_SECRET=your-secure-random-string
+SLACK_BOT_TOKEN=xoxb-xxxxxxxxxx-xxxxxxxxxx-xxxxxxxxxxxxxxxxxxxxxxxx
+CRON_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
 ### Slack Bot Permissions
