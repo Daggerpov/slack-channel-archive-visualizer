@@ -453,19 +453,51 @@ export class SlackParser {
     return text;
   }
 
-  static parseMessageTextToElements(message: SlackMessage, users: SlackUser[]): (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention'; url?: string; text: string; userId?: string })[] {
+  static decodeHtmlEntities(text: string): string {
+    const entityMap: Record<string, string> = {
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&nbsp;': ' ',
+      '&copy;': '©',
+      '&reg;': '®',
+      '&trade;': '™',
+      '&hellip;': '…',
+      '&mdash;': '—',
+      '&ndash;': '–',
+      '&ldquo;': '"',
+      '&rdquo;': '"',
+      '&lsquo;': "'",
+      '&rsquo;': "'"
+    };
+
+    return text.replace(/&[a-zA-Z0-9#]+;/g, (entity) => {
+      return entityMap[entity] || entity;
+    });
+  }
+
+  static parseMessageTextToElements(message: SlackMessage, users: SlackUser[]): (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention' | 'bold' | 'italic' | 'strikethrough' | 'code' | 'code_block'; url?: string; text: string; userId?: string; language?: string })[] {
     let text = message.text;
-    const elements: (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention'; url?: string; text: string; userId?: string })[] = [];
     
-    // Combined regex for all special elements
-    const combinedRegex = /<(https?:\/\/[^|>]+)(\|([^>]+))?|<@([UW][A-Z0-9]+)>|<#([C][A-Z0-9]+)\|([^>]+)>|<!everyone>|<!channel>|<!here>/g;
+    // First decode HTML entities
+    text = this.decodeHtmlEntities(text);
+    
+    const elements: (string | { type: 'link' | 'user_mention' | 'channel_mention' | 'special_mention' | 'bold' | 'italic' | 'strikethrough' | 'code' | 'code_block'; url?: string; text: string; userId?: string; language?: string })[] = [];
+    
+    // Combined regex for all special elements including markdown and plain URLs
+    const combinedRegex = /<(https?:\/\/[^|>]+)(\|([^>]+))?|<@([UW][A-Z0-9]+)>|<#([C][A-Z0-9]+)\|([^>]+)>|<!everyone>|<!channel>|<!here>|```([^`]*?)```|\*([^*]+?)\*|_([^_]+?)_|~([^~]+?)~|`([^`]+?)`|(https?:\/\/[^\s<>]+)/g;
     let lastIndex = 0;
     let match;
 
     while ((match = combinedRegex.exec(text)) !== null) {
       // Add text before the match
       if (match.index > lastIndex) {
-        elements.push(text.substring(lastIndex, match.index));
+        const beforeText = text.substring(lastIndex, match.index);
+        if (beforeText) {
+          elements.push(beforeText);
+        }
       }
 
       if (match[1]) {
@@ -489,6 +521,25 @@ export class SlackParser {
         elements.push({ type: 'special_mention', text: '@channel' });
       } else if (match[0] === '<!here>') {
         elements.push({ type: 'special_mention', text: '@here' });
+      } else if (match[7] !== undefined) {
+        // Code block match ```code```
+        elements.push({ type: 'code_block', text: match[7] });
+      } else if (match[8] !== undefined) {
+        // Bold match *text*
+        elements.push({ type: 'bold', text: match[8] });
+      } else if (match[9] !== undefined) {
+        // Italic match _text_
+        elements.push({ type: 'italic', text: match[9] });
+      } else if (match[10] !== undefined) {
+        // Strikethrough match ~text~
+        elements.push({ type: 'strikethrough', text: match[10] });
+      } else if (match[11] !== undefined) {
+        // Inline code match `code`
+        elements.push({ type: 'code', text: match[11] });
+      } else if (match[12] !== undefined) {
+        // Plain URL match (not wrapped in <>)
+        const url = match[12];
+        elements.push({ type: 'link', url, text: url });
       }
 
       lastIndex = match.index + match[0].length;
@@ -496,7 +547,10 @@ export class SlackParser {
 
     // Add remaining text
     if (lastIndex < text.length) {
-      elements.push(text.substring(lastIndex));
+      const remainingText = text.substring(lastIndex);
+      if (remainingText) {
+        elements.push(remainingText);
+      }
     }
 
     // If no special elements were found, return the text as a single element

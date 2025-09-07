@@ -96,6 +96,50 @@
   white-space: pre-wrap;
 }
 
+/* Markdown formatting styles */
+.message-bold {
+  font-weight: 700;
+}
+
+.message-italic {
+  font-style: italic;
+}
+
+.message-strikethrough {
+  text-decoration: line-through;
+}
+
+.message-code {
+  background-color: #f1f2f6;
+  color: #e01e5a;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 12px;
+  border: 1px solid #e8e8e8;
+}
+
+.message-code-block {
+  background-color: #f8f8f8;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 4px 0;
+  font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.message-code-block code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+  color: #1d1c1d;
+}
+
 /* User mentions styling */
 .user-mention {
   background-color: #e3f2fd;
@@ -137,16 +181,16 @@
 
 .message-link {
   color: #1264a3;
-  text-decoration: none;
+  text-decoration: underline;
   font-weight: 500;
-  border-bottom: 1px solid transparent;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .message-link:hover {
-  text-decoration: none;
-  border-bottom-color: #1264a3;
-  background-color: rgba(18, 100, 163, 0.05);
+  color: #0d47a1;
+  text-decoration: underline;
+  background-color: rgba(18, 100, 163, 0.1);
   padding: 1px 2px;
   border-radius: 2px;
 }
@@ -434,8 +478,32 @@
   text-decoration: none;
 }
 
-/* Dark mode support for files */
+/* Dark mode support */
 @media (prefers-color-scheme: dark) {
+  .message-link {
+    color: #58a6ff;
+  }
+  
+  .message-link:hover {
+    color: #79c0ff;
+    background-color: rgba(88, 166, 255, 0.1);
+  }
+  
+  .message-code {
+    background-color: #2d3748;
+    color: #f56565;
+    border-color: #4a5568;
+  }
+  
+  .message-code-block {
+    background-color: #2d3748;
+    border-color: #4a5568;
+  }
+  
+  .message-code-block code {
+    color: #e2e8f0;
+  }
+  
   .message-image {
     border-color: #3f3f3f;
     background-color: #2c2d30;

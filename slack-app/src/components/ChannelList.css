@@ -44,7 +44,7 @@
 
 .channel-hash {
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.9);
   font-size: 14px;
 }
 
@@ -52,7 +52,7 @@
   flex: 1;
   font-size: 15px;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(255, 255, 255, 0.98);
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;

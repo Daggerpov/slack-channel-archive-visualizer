@@ -111,6 +111,36 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                     {element.text}
                   </span>
                 );
+              } else if (element.type === 'bold') {
+                return (
+                  <strong key={elementIndex} className="message-bold">
+                    {element.text}
+                  </strong>
+                );
+              } else if (element.type === 'italic') {
+                return (
+                  <em key={elementIndex} className="message-italic">
+                    {element.text}
+                  </em>
+                );
+              } else if (element.type === 'strikethrough') {
+                return (
+                  <span key={elementIndex} className="message-strikethrough">
+                    {element.text}
+                  </span>
+                );
+              } else if (element.type === 'code') {
+                return (
+                  <code key={elementIndex} className="message-code">
+                    {element.text}
+                  </code>
+                );
+              } else if (element.type === 'code_block') {
+                return (
+                  <pre key={elementIndex} className="message-code-block">
+                    <code>{element.text}</code>
+                  </pre>
+                );
               }
               return null;
             })}
@@ -281,6 +311,36 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                                 >
                                   {element.text}
                                 </span>
+                              );
+                            } else if (element.type === 'bold') {
+                              return (
+                                <strong key={elementIndex} className="message-bold">
+                                  {element.text}
+                                </strong>
+                              );
+                            } else if (element.type === 'italic') {
+                              return (
+                                <em key={elementIndex} className="message-italic">
+                                  {element.text}
+                                </em>
+                              );
+                            } else if (element.type === 'strikethrough') {
+                              return (
+                                <span key={elementIndex} className="message-strikethrough">
+                                  {element.text}
+                                </span>
+                              );
+                            } else if (element.type === 'code') {
+                              return (
+                                <code key={elementIndex} className="message-code">
+                                  {element.text}
+                                </code>
+                              );
+                            } else if (element.type === 'code_block') {
+                              return (
+                                <pre key={elementIndex} className="message-code-block">
+                                  <code>{element.text}</code>
+                                </pre>
                               );
                             }
                             return null;
