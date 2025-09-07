@@ -6,6 +6,7 @@ import ChannelList from './components/ChannelList';
 import ChannelView from './components/ChannelView';
 import FileUpload from './components/FileUpload';
 import AuthGateway, { UserRole } from './components/AuthGateway';
+import AutoExportManager from './components/AutoExportManager';
 import './App.css';
 
 function App() {
@@ -98,6 +99,17 @@ function App() {
 
   const handleChannelSelect = (channelName: string) => {
     setSelectedChannel(channelName);
+  };
+
+  const handleAutoExportDataUpdate = (newData: SlackExport) => {
+    setSlackData(newData);
+    // Auto-select the first available channel if none is selected
+    if (!selectedChannel) {
+      const availableChannels = Object.keys(newData.messages);
+      if (availableChannels.length > 0) {
+        setSelectedChannel(availableChannels[0]);
+      }
+    }
   };
 
   const handleAuthenticated = (role: UserRole) => {
@@ -219,6 +231,12 @@ function App() {
             <div className="no-channel-selected">
               <h2>Select a channel to view messages</h2>
               <p>Choose a channel from the sidebar to start exploring your Slack archive.</p>
+              
+              {/* Show AutoExportManager when no channel is selected */}
+              <AutoExportManager 
+                onDataUpdated={handleAutoExportDataUpdate}
+                userRole={userRole}
+              />
             </div>
           )}
         </div>

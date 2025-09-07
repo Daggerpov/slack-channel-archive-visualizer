@@ -1,0 +1,132 @@
+.auto-export-manager {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.auto-export-manager h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.auto-export-manager h4 {
+  color: #34495e;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.export-schedule,
+.last-export,
+.manual-export,
+.export-info {
+  margin-bottom: 20px;
+}
+
+.export-schedule p,
+.last-export p {
+  margin: 5px 0;
+  color: #555;
+}
+
+.passkey-input {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.passkey-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.passkey-input input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.toggle-passkey {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.toggle-passkey:hover {
+  background: #e9ecef;
+}
+
+.export-button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.export-button:hover:not(:disabled) {
+  background: #2980b9;
+}
+
+.export-button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.export-error {
+  background: #fee;
+  border: 1px solid #fcc;
+  border-radius: 4px;
+  padding: 10px;
+  color: #c33;
+  margin: 10px 0;
+}
+
+.export-info ul {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.export-info li {
+  margin: 5px 0;
+  color: #666;
+}
+
+.guest-view {
+  text-align: center;
+  color: #666;
+}
+
+.guest-view h3 {
+  color: #7f8c8d;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .auto-export-manager {
+    margin: 10px 0;
+    padding: 15px;
+  }
+  
+  .passkey-input {
+    flex-direction: column;
+  }
+  
+  .toggle-passkey {
+    align-self: flex-start;
+    width: fit-content;
+  }
+}

@@ -1,7 +1,7 @@
 {
   "buildCommand": "cd slack-app && npm run build",
   "outputDirectory": "slack-app/build",
-  "installCommand": "cd slack-app && npm install",
+  "installCommand": "npm install && cd slack-app && npm install",
   "rewrites": [
     {
       "source": "/api/(.*)",
@@ -10,6 +10,12 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron-export",
+      "schedule": "0 * * * *"
     }
   ]
 }

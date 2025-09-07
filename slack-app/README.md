@@ -6,6 +6,7 @@ A React application for viewing and exploring Slack channel exports in a familia
 
 - **Authentication Gateway**: Secure access with passkey-based authentication
 - **Role-Based Access Control**: Different access levels for guests, club members, and administrators
+- **Automated Slack Exports**: Scheduled data fetching via Slack API with smart scheduling
 - **Persistent Storage**: Uploaded archives are stored locally for future access
 - **Familiar Interface**: Slack-like UI for easy navigation and message viewing
 - **Responsive Design**: Works on desktop and mobile devices
@@ -30,14 +31,16 @@ The application uses a three-tier authentication system:
    - Full access to view archives
    - Can upload new Slack exports
    - Can replace existing archives
+   - Can trigger manual automated exports
    - Requires admin passkey (see environment setup)
 
 ### Environment Configuration
 
 🔒 **Security Update**: This application now uses secure server-side authentication via Vercel Serverless Functions.
 
-See the `ENVIRONMENT_SETUP.md` file in the project root for detailed setup instructions including:
+See the `ENVIRONMENT_SETUP.md` and `SLACK_BOT_SETUP.md` files in the project root for detailed setup instructions including:
 - Secure environment variable configuration
+- Slack Bot setup for automated exports
 - Vercel deployment setup
 - Local development setup
 
@@ -85,8 +88,17 @@ The application will open at [http://localhost:3000](http://localhost:3000).
 
 **Note**: Contact your system administrator for the current passkeys.
 
-### Uploading Slack Exports
+### Slack Data Management
 
+#### Automated Exports (Recommended)
+1. Set up a Slack Bot following the `SLACK_BOT_SETUP.md` guide
+2. Configure environment variables for automated fetching
+3. The system will automatically:
+   - Fetch data hourly until September 15, 2025
+   - Switch to daily fetches after September 15, 2025
+   - Update the archive with new messages continuously
+
+#### Manual Uploads
 1. Export your Slack workspace data from Slack's admin settings
 2. Extract the downloaded ZIP file
 3. As an administrator, use the file upload interface
