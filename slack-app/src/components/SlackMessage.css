@@ -2,6 +2,7 @@
   padding: 8px 20px;
   border-left: 4px solid transparent;
   transition: all 0.1s ease;
+  pointer-events: auto;
 }
 
 .slack-message:hover {
@@ -13,6 +14,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  pointer-events: auto;
 }
 
 .message-avatar {
@@ -48,6 +50,7 @@
 .message-body {
   flex: 1;
   min-width: 0;
+  pointer-events: auto;
 }
 
 .message-header {
@@ -94,6 +97,7 @@
   line-height: 1.46668;
   word-wrap: break-word;
   white-space: pre-wrap;
+  pointer-events: auto;
 }
 
 /* Markdown formatting styles */
@@ -185,6 +189,9 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .message-link:hover {
@@ -193,6 +200,9 @@
   background-color: rgba(18, 100, 163, 0.1);
   padding: 1px 2px;
   border-radius: 2px;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .message-reactions {
@@ -366,6 +376,7 @@
   line-height: 1.46668;
   word-wrap: break-word;
   white-space: pre-wrap;
+  pointer-events: auto;
 }
 
 .thread-reply-reactions {
@@ -482,11 +493,17 @@
 @media (prefers-color-scheme: dark) {
   .message-link {
     color: #58a6ff;
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
   }
   
   .message-link:hover {
     color: #79c0ff;
     background-color: rgba(88, 166, 255, 0.1);
+    pointer-events: auto;
+    position: relative;
+    z-index: 1;
   }
   
   .message-code {

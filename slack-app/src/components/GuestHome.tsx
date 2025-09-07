@@ -60,7 +60,7 @@ const GuestHome: React.FC = () => {
         <div className="guest-header">
           <div className="header-content">
             <h1>Slack Channel Archive Visualizer</h1>
-            <p>Upload and explore your Slack channel exports in a familiar interface</p>
+            <p>Break free from Slack's 90-day message history limit - see ALL your organization's chat messages</p>
           </div>
           <div className="header-actions">
             <a href="/mmhc" className="club-access-link">
@@ -82,18 +82,20 @@ const GuestHome: React.FC = () => {
               Upload your own Slack channel export to visualize and explore your messages. 
               Your data is processed locally in your browser and is not saved permanently.
             </p>
-            <div className="features">
-              <div className="feature">
-                <h3>🔒 Private & Secure</h3>
-                <p>Your data never leaves your browser</p>
-              </div>
-              <div className="feature">
-                <h3>📊 Rich Visualization</h3>
-                <p>Explore messages in a familiar Slack-like interface</p>
-              </div>
-              <div className="feature">
-                <h3>🔍 Easy Navigation</h3>
-                <p>Browse channels and search through your archive</p>
+            <div className="features-slider">
+              <div className="features-track">
+                <div className="feature">
+                  <h3>🔒 Private & Secure</h3>
+                  <p>Your data never leaves your browser</p>
+                </div>
+                <div className="feature">
+                  <h3>📊 Rich Visualization</h3>
+                  <p>Explore messages in a familiar Slack-like interface</p>
+                </div>
+                <div className="feature">
+                  <h3>🔍 Easy Navigation</h3>
+                  <p>Browse channels and search through your archive</p>
+                </div>
               </div>
             </div>
           </div>
@@ -101,6 +103,20 @@ const GuestHome: React.FC = () => {
             onFilesSelected={handleFilesSelected}
             isLoading={isLoading}
           />
+        </div>
+        
+        <div className="guest-footer">
+          <p>
+            View the source code on{' '}
+            <a 
+              href="https://github.com/Daggerpov/slack-channel-archive-visualizer" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="github-link"
+            >
+              GitHub
+            </a>
+          </p>
         </div>
       </div>
     );
@@ -150,6 +166,20 @@ const GuestHome: React.FC = () => {
             </div>
           )}
         </div>
+      </div>
+      
+      <div className="guest-footer">
+        <p>
+          View the source code on{' '}
+          <a 
+            href="https://github.com/Daggerpov/slack-channel-archive-visualizer" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="github-link"
+          >
+            GitHub
+          </a>
+        </p>
       </div>
     </div>
   );

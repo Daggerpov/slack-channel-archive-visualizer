@@ -79,6 +79,12 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="message-link"
+                    style={{ 
+                      pointerEvents: 'auto', 
+                      position: 'relative', 
+                      zIndex: 10,
+                      display: 'inline'
+                    }}
                   >
                     {element.text}
                   </a>
@@ -199,6 +205,11 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="file-download"
+                            style={{ 
+                              pointerEvents: 'auto', 
+                              position: 'relative', 
+                              zIndex: 10
+                            }}
                           >
                             Download
                           </a>
@@ -280,6 +291,12 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
                                   target="_blank" 
                                   rel="noopener noreferrer"
                                   className="message-link"
+                                  style={{ 
+                                    pointerEvents: 'auto', 
+                                    position: 'relative', 
+                                    zIndex: 10,
+                                    display: 'inline'
+                                  }}
                                 >
                                   {element.text}
                                 </a>

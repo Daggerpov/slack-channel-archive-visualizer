@@ -38,28 +38,36 @@
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.channel-list .channel-item:hover .channel-name {
+  color: #ffffff !important;
+}
+
+.channel-list .channel-item:hover .channel-hash {
+  color: #ffffff !important;
+}
+
 .channel-item.selected {
   background-color: #1264a3;
 }
 
-.channel-hash {
+.channel-list .channel-hash {
   font-weight: 400;
-  color: #ffffff;
+  color: #ffffff !important;
   font-size: 14px;
 }
 
-.channel-name {
+.channel-list .channel-name {
   flex: 1;
   font-size: 15px;
   font-weight: 400;
-  color: #ffffff;
+  color: #ffffff !important;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.channel-item.selected .channel-name {
-  color: #ffffff;
+.channel-list .channel-item.selected .channel-name {
+  color: #ffffff !important;
   font-weight: 600;
 }
 
