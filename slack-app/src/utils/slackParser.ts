@@ -302,6 +302,67 @@ export class SlackParser {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
+  static formatDateTime(timestamp: string): string {
+    const date = new Date(parseFloat(timestamp) * 1000);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // Check if it's today
+    if (date.toDateString() === today.toDateString()) {
+      return `Today at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+    
+    // Check if it's yesterday
+    if (date.toDateString() === yesterday.toDateString()) {
+      return `Yesterday at ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+    
+    // For other dates, show the full date
+    const options: Intl.DateTimeFormatOptions = {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
+      hour: '2-digit',
+      minute: '2-digit'
+    };
+    
+    return date.toLocaleDateString([], options);
+  }
+
+  static formatDateMarker(timestamp: string): string {
+    const date = new Date(parseFloat(timestamp) * 1000);
+    const today = new Date();
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    // Check if it's today
+    if (date.toDateString() === today.toDateString()) {
+      return 'Today';
+    }
+    
+    // Check if it's yesterday
+    if (date.toDateString() === yesterday.toDateString()) {
+      return 'Yesterday';
+    }
+    
+    // For other dates, show the full date
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: date.getFullYear() !== today.getFullYear() ? 'numeric' : undefined
+    };
+    
+    return date.toLocaleDateString([], options);
+  }
+
+  static isSameDay(timestamp1: string, timestamp2: string): boolean {
+    const date1 = new Date(parseFloat(timestamp1) * 1000);
+    const date2 = new Date(parseFloat(timestamp2) * 1000);
+    return date1.toDateString() === date2.toDateString();
+  }
+
   static getUserById(users: SlackUser[], userId: string): SlackUser | undefined {
     return users.find(user => user.id === userId);
   }

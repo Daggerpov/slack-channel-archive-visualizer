@@ -15,7 +15,7 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
   showAvatar = true 
 }) => {
   const user = message.user ? SlackParser.getUserById(users, message.user) : null;
-  const time = SlackParser.formatTime(message.ts);
+  const time = showAvatar ? SlackParser.formatDateTime(message.ts) : SlackParser.formatTime(message.ts);
   const messageElements = SlackParser.parseMessageTextToElements(message, users);
 
   // Handle system messages
@@ -115,6 +115,72 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
               return null;
             })}
           </div>
+          
+          {/* File attachments */}
+          {message.files && message.files.length > 0 && (
+            <div className="message-files">
+              {message.files.map((file, fileIndex) => {
+                const isImage = file.mimetype?.startsWith('image/') || 
+                  ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(file.filetype?.toLowerCase() || '');
+                
+                return (
+                  <div key={file.id || fileIndex} className="message-file">
+                    {isImage ? (
+                      <div className="message-image">
+                        <img 
+                          src={file.url_private || file.permalink} 
+                          alt={file.title || file.name}
+                          className="file-image"
+                          onError={(e) => {
+                            // Fallback to showing file info if image fails to load
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const parent = target.parentElement;
+                            if (parent) {
+                              parent.innerHTML = `
+                                <div class="file-info">
+                                  <div class="file-icon">📷</div>
+                                  <div class="file-details">
+                                    <div class="file-name">${file.title || file.name}</div>
+                                    <div class="file-meta">${file.pretty_type || file.filetype} • ${(file.size / 1024).toFixed(1)} KB</div>
+                                  </div>
+                                </div>
+                              `;
+                            }
+                          }}
+                        />
+                        {file.title && file.title !== file.name && (
+                          <div className="image-caption">{file.title}</div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="file-info">
+                        <div className="file-icon">📎</div>
+                        <div className="file-details">
+                          <div className="file-name">{file.title || file.name}</div>
+                          <div className="file-meta">
+                            {file.pretty_type || file.filetype}
+                            {file.size && ` • ${(file.size / 1024).toFixed(1)} KB`}
+                          </div>
+                        </div>
+                        {file.url_private && (
+                          <a 
+                            href={file.url_private} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="file-download"
+                          >
+                            Download
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          
           {message.reactions && message.reactions.length > 0 && (
             <div className="message-reactions">
               {message.reactions.map((reaction, index) => (
@@ -136,7 +202,7 @@ const SlackMessage: React.FC<SlackMessageProps> = ({
               <div className="thread-messages">
                 {message.thread_replies.map((reply, index) => {
                   const replyUser = reply.user ? SlackParser.getUserById(users, reply.user) : null;
-                  const replyTime = SlackParser.formatTime(reply.ts);
+                  const replyTime = SlackParser.formatDateTime(reply.ts);
                   const replyElements = SlackParser.parseMessageTextToElements(reply, users);
                   
                   return (

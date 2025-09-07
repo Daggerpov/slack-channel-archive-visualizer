@@ -1,0 +1,38 @@
+.date-marker {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  padding: 0 20px;
+}
+
+.date-marker-line {
+  flex: 1;
+  height: 1px;
+  background-color: #e0e0e0;
+}
+
+.date-marker-text {
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1d1c1d;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  white-space: nowrap;
+  text-align: center;
+  min-width: fit-content;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .date-marker-line {
+    background-color: #3f3f3f;
+  }
+  
+  .date-marker-text {
+    color: #d1d2d3;
+    background-color: #1a1d21;
+    border-color: #3f3f3f;
+  }
+}
