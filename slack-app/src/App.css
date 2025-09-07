@@ -47,6 +47,42 @@
   font-weight: 500;
 }
 
+.home-link {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.9;
+  margin-right: 16px;
+  transition: opacity 0.2s ease;
+}
+
+.home-link:hover {
+  opacity: 1;
+}
+
+.club-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+}
+
+.club-header {
+  background: linear-gradient(135deg, #4a154b 0%, #611f69 100%);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.club-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
 .logout-button {
   background: rgba(255, 255, 255, 0.2);
   color: white;
