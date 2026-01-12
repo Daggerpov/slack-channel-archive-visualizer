@@ -1,0 +1,11 @@
+# Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+
+This work is licensed under the Creative Commons
+Attribution-NonCommercial-ShareAlike 4.0 International License.
+
+You are free to share and adapt the material
+for non-commercial purposes, provided that any derivative works
+are distributed under the same license.
+
+Full license text:
+https://creativecommons.org/licenses/by-nc-sa/4.0/
